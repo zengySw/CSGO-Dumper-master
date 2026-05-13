@@ -48,13 +48,13 @@ int main()
     // Показываем список процессов для отладки
     ListGModProcesses();
     
-    // Пробуем зацепиться за hl2.exe, если нет — за gmod.exe
-    std::cout << "[*] Attempting to attach to hl2.exe..." << std::endl;
-    if (!pProcess->Attach("hl2.exe")) {
-        std::cout << "[-] Failed to attach to hl2.exe" << std::endl;
-        std::cout << "[*] Trying gmod.exe..." << std::endl;
+    // Пробуем зацепиться за gmod.exe (основной процесс GMod), если нет — за hl2.exe
+    std::cout << "[*] Attempting to attach to gmod.exe..." << std::endl;
+    if (!pProcess->Attach("gmod.exe")) {
+        std::cout << "[-] Failed to attach to gmod.exe" << std::endl;
+        std::cout << "[*] Trying hl2.exe..." << std::endl;
         
-        if (!pProcess->Attach("gmod.exe")) {
+        if (!pProcess->Attach("hl2.exe")) {
             std::cout << "[-] Garry's Mod process not found!" << std::endl;
             std::cout << "[*] Make sure the game is running." << std::endl;
             std::cout << "[*] Press Enter to exit..." << std::endl;
