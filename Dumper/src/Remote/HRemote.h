@@ -106,16 +106,20 @@ namespace Dumper
             static bool                             CompareBytes( const unsigned char* bytes, const char* pattern );
             uintptr_t                               FindPattern( const std::string& module, const char* pattern, short type, uintptr_t patternOffset, uintptr_t addressOffset );
 
-        private:
-
-            bool                                    GetProcessID( void );
-            bool                                    GetProcessHandle( void );
-            bool                                    GetProcessModules( void );
-
-        public:
-
             const mapModule&                        GetModules( void ) const;
             CModule*                                GetModuleByName( const std::string& name );
+
+            // Геттеры для отладки
+            const std::string& GetProcessName() const { return _procname; }
+            DWORD GetProcessID() const { return _procid; }
+
+            static CProcess* Singleton(void);
+
+        private:
+
+            bool                                    FindProcessID( void );
+            bool                                    GetProcessHandle( void );
+            bool                                    GetProcessModules( void );
 
         protected:
 
@@ -129,12 +133,6 @@ namespace Dumper
             HANDLE                                  _hproc = nullptr;       // process handle
 
             mapModule                               _modules;               // unordered_map holds modules
-        public:
-            static CProcess* Singleton(void);
-            
-            // Геттеры для отладки
-            const std::string& GetProcessName() const { return _procname; }
-            DWORD GetProcessID() const { return _procid; }
         };
     }
 }

@@ -110,6 +110,11 @@ namespace Dumper
 
             int                                     GetNetVar( const std::string& tablename, const std::string& varname );
 
+            // Геттер для отладки
+            size_t GetTableCount() const { return _tables.size(); }
+
+            static CNetVarManager* Singleton(void);
+
         private:
 
             void                                    ScanTable( RecvTable& table, int level, int offset, const char* name );
@@ -117,12 +122,6 @@ namespace Dumper
         protected:
 
             mapTable                                _tables;                    // recvtables dumped
-
-        public:
-            static CNetVarManager* Singleton(void);
-            
-            // Геттер для отладки
-            size_t GetTableCount() const { return _tables.size(); }
         };
     }
 }

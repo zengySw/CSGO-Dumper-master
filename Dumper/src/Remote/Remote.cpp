@@ -90,7 +90,7 @@ namespace Dumper
 
             auto curtime = GetTickCount();
             do {
-                if( !GetProcessID() )
+                if( !FindProcessID() )
                     continue;
 
                 if( !GetProcessHandle() )
@@ -180,7 +180,7 @@ namespace Dumper
             return 0;
         }
 
-        bool CProcess::GetProcessID( void )
+        bool CProcess::FindProcessID( void )
         {
             if( _haswindow ) {
                 auto hWin = FindWindowA( _winclname.empty() ? NULL : _winclname.c_str(), _winname.empty() ? NULL : _winname.c_str() );
