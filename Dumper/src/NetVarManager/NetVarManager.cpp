@@ -146,41 +146,47 @@ namespace Dumper
             ss << "| -> " << Utilis::GetTime();
             ss << "- -" << std::endl << std::endl;
 
-            for (auto& tablePair : _tables) {
-                auto& tableName = tablePair.first;
-                auto& props = tablePair.second;
+            for (auto& table : _tables) {
 
-                auto first = props.empty() ? true : props[0].first[0] == 'D';
-                ss << tableName;
+                auto first = table.second[0].first[0] == 'D';
+                ss << table.first;
 
-                for (auto& prop : props) {
-                    if (prop.first[0] == 'D') {
-                        ss << (first ? " : public " : ", ") << prop.first.c_str();
-                        first = false;
-                        continue;
+                for (auto& table : _tables) {  // table — это pair<string, vector<...>>
+                    auto& tableName = table.first;
+                    auto& props = table.second;  // vector<pair<string, RecvProp*>>
+
+                    auto first = props.empty() ? true : props[0].first[0] == 'D';
+                    ss << tableName;
+
+                    for (auto& prop : props) {  // prop — это pair<string, RecvProp*>
+                        if (prop.first[0] == 'D') {
+                            ss << (first ? " : public " : ", ") << prop.first.c_str();
+                            first = false;
+                            continue;
+                        }
+                        else if (!first) {
+                            ss << std::endl;
+                            first = true;
+                        }
+
+                        ss << std::setw(53)
+                            << std::setfill('_')
+                            << std::left
+                            << (std::string(prop.second->GetLevel(), ' ') + "|__" + prop.first).c_str()
+                            << std::right
+                            << std::hex
+                            << " -> 0x"
+                            << std::setw(4)
+                            << std::setfill('0')
+                            << std::uppercase
+                            << prop.second->GetPropOffset()
+                            << " ( " + PropType_t::toString(
+                                prop.second->GetPropType(),
+                                prop.second->GetPropElements(),
+                                prop.second->GetPropStringBufferCount()
+                            ) + " )"
+                            << std::endl;
                     }
-                    else if (!first) {
-                        ss << std::endl;
-                        first = true;
-                    }
-
-                    ss << std::setw(53)
-                        << std::setfill('_')
-                        << std::left
-                        << (std::string(prop.second->GetLevel(), ' ') + "|__" + prop.first).c_str()
-                        << std::right
-                        << std::hex
-                        << " -> 0x"
-                        << std::setw(4)
-                        << std::setfill('0')
-                        << std::uppercase
-                        << prop.second->GetPropOffset()
-                        << " ( " + PropType_t::toString(
-                            prop.second->GetPropType(),
-                            prop.second->GetPropElements(),
-                            prop.second->GetPropStringBufferCount()
-                        ) + " )"
-                        << std::endl;
                 }
             }
 
@@ -236,7 +242,7 @@ namespace Dumper
                     --level;
                 }
 
-                ScanTable(recvTable, level + 1, prop->GetPropOffset(), name);
+                ScanTable(recvTable, ++level, prop->GetPropOffset(), name);
             }
         }
 

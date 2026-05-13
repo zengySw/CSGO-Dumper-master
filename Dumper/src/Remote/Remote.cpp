@@ -238,7 +238,14 @@ namespace Dumper
 
             CloseHandle( hSnapshot );
 
-            // Убрали строгую проверку на client.dll для поддержки GMod и других игр
+            if( _modules.find( "client.dll" ) == _modules.end() ) { // TODO: fix this -> sanity-check :S
+                if( !_modules.empty() ) {
+                    for( auto& m : _modules ) {
+                        delete m.second;
+                    }
+                    _modules.clear();
+                }
+            }
             return bool( !_modules.empty() );
         }
 
