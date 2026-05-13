@@ -131,6 +131,10 @@ namespace Dumper
             mapModule                               _modules;               // unordered_map holds modules
         public:
             static CProcess* Singleton(void);
+            
+            // Геттеры для отладки
+            const std::string& GetProcessName() const { return _procname; }
+            DWORD GetProcessID() const { return _procid; }
         };
     }
 }

@@ -120,6 +120,9 @@ namespace Dumper
 
         public:
             static CNetVarManager* Singleton(void);
+            
+            // Геттер для отладки
+            size_t GetTableCount() const { return _tables.size(); }
         };
     }
 }
